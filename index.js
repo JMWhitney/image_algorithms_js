@@ -1,7 +1,7 @@
-var flower = "./flower.png";
+var image = "./flower.jpg";
 
 var img = new Image();
-img.src = flower;
+img.src = image;
 var canvas = document.getElementById('canvas1');
 var ctx = canvas.getContext('2d');
 
@@ -32,12 +32,10 @@ function draw(img) {
   var data2 = drawingData.data;
   
   var iterate = function() {
-    let a = 255;
     for (let i = 0; i < data2.length; i += 4) {
       let new_r = Math.floor(Math.random() * 255);
       let new_g = Math.floor(Math.random() * 255);
       let new_b = Math.floor(Math.random() * 255);
-
 
       //Calculate previous color-distance
       let distance1 = distance(data1[i], data1[i+1], data1[i+2],
@@ -52,15 +50,51 @@ function draw(img) {
         data2[i]   = new_r;
         data2[i+1] = new_g;
         data2[i+2] = new_b;
-        data2[i+3] = a;
+        data2[i+3] = 255;
       }
     }
 
     ctx2.putImageData(drawingData, 0, 0);
     setTimeout(iterate, 10);
   };
+
+  var initSort = function() {
+
+    let n = 1;
+
+    var sort = function() {
   
-  var btn = document.getElementById('iterate');
-  btn.addEventListener('click', iterate);
+      for (let i = 0; i < data1.length - (n * 4); i += 4) {
+  
+        d1 = distance(data1[i], data1[i+1], data1[i+2], 0, 0, 0);
+        d2 = distance(data1[i+4], data1[i+5], data1[i+6], 0, 0, 0);
+  
+        if(d2 < d1) {
+          //Create copy so we don't lose the data
+          let temp = [data1[i], data1[i+1], data1[i+2]];
+  
+          //swap first point with second.
+          data1[i] = data1[i+4];
+          data1[i+1] = data1[i+5];
+          data1[i+2] = data1[i+6];
+  
+          //swap second point with original first point
+          data1[i+4] = temp[0];
+          data1[i+5] = temp[1];
+          data1[i+6] = temp[2];
+          
+        }
+      }
+
+      n++;
+      ctx2.putImageData(imageData, 0, 0);
+    };
+
+    setInterval(sort, 0);
+
+  }
+
+  var btn = document.getElementById('func');
+  btn.addEventListener('click', initSort);
   
 }
