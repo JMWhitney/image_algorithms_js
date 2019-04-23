@@ -1,12 +1,16 @@
-var image = "./flower.png";
+var image = "./art.jpg";
 
 var img = new Image();
 img.src = image;
 var canvas = document.getElementById('canvas1');
 var ctx = canvas.getContext('2d');
+ctx.canvas.width = img.width;
+ctx.canvas.height = img.height;
 
 var canvas2 = document.getElementById('canvas2');
 ctx2 = canvas2.getContext('2d');
+ctx2.canvas.width = img.width;
+ctx2.canvas.height = img.height;
 
 img.onload = function() {
   draw(this);
@@ -87,6 +91,7 @@ function draw(img) {
       }
 
       n++;
+      debugger;
       ctx2.putImageData(imageData, 0, 0);
     };
     
