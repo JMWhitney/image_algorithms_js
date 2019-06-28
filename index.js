@@ -145,21 +145,32 @@ function draw(img) {
   };
 
   var selectionSort = function() {
-    let i, j;
+    let i = 0, j;
+    const process = setInterval(loop, 16);
 
     // Advance through the image pixel data array
-    for( i = 0; i < data1.length - 4; i+=4 ) {
+    function loop() {
+      //( i = 0; i < data1.length - 4; i+=4 ) {
+
       debugger;
+
+      if(i >= data1.length - 4) {
+        debugger;
+        clearInterval(process);
+        return;
+      }
+
       // Assume the first element is the smallest
       let jMin = i;
       
       // Comparisons
-      for( j=i+4; j < data1.length; j+=4 ) {
+      for( j = i+4; j <= data1.length - 4; j+=4 ) {
         
-        d1 = distance(data1[jMin], data1[jMin], data1[jMin]);
+        d1 = distance(data1[jMin], data1[jMin+1], data1[jMin+2]);
         d2 = distance(data1[j], data1[j+1], data1[j+2]);
   
         if(d2 < d1) {
+          debugger;
           jMin = j;
         }
       }
@@ -181,9 +192,9 @@ function draw(img) {
 
       }
 
+      i += 4;
+      ctx2.putImageData(imageData, 0, 0);
     }
-    ctx2.putImageData(imageData, 0, 0);
-
   }
 
   var btn = document.getElementById('func');
