@@ -1,4 +1,4 @@
-var image = "./art.jpg";
+var image = "flower.png";
 
 var img = new Image();
 img.src = image;
@@ -144,6 +144,48 @@ function draw(img) {
     }
   };
 
+  var selectionSort = function() {
+    let i, j;
+
+    // Advance through the image pixel data array
+    for( i = 0; i < data1.length - 4; i+=4 ) {
+      debugger;
+      // Assume the first element is the smallest
+      let jMin = i;
+      
+      // Comparisons
+      for( j=i+4; j < data1.length; j+=4 ) {
+        
+        d1 = distance(data1[jMin], data1[jMin], data1[jMin]);
+        d2 = distance(data1[j], data1[j+1], data1[j+2]);
+  
+        if(d2 < d1) {
+          jMin = j;
+        }
+      }
+
+      //Swap
+      if (jMin !== i) {
+        //Create copy so we don't lose the data
+        let temp = [data1[i], data1[i+1], data1[i+2]];
+  
+        //swap first point with second.
+        data1[i] = data1[jMin];
+        data1[i+1] = data1[jMin+1];
+        data1[i+2] = data1[jMin+2];
+
+        //swap second point with original first point
+        data1[jMin] = temp[0];
+        data1[jMin+1] = temp[1];
+        data1[jMin+2] = temp[2];
+
+      }
+
+    }
+    ctx2.putImageData(imageData, 0, 0);
+
+  }
+
   var btn = document.getElementById('func');
-  btn.addEventListener('click', combSort);
+  btn.addEventListener('click', selectionSort);
 }
