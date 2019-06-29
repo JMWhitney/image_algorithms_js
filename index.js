@@ -28,8 +28,8 @@ function draw(img) {
   img.style.display = 'none';
 
   //Source data
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const data1 = imageData.data;
+  var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  var data1 = imageData.data;
 
   //Recreation data
   var drawingData = ctx2.getImageData(0, 0, canvas.width, canvas.height);
@@ -67,6 +67,11 @@ function draw(img) {
     let n = 1;
 
     var sort = function() {
+
+      if(data1.length === (n * 4)) {
+        clearInterval(id);
+        return;
+      }
   
       for (let i = 0; i < data1.length - (n * 4); i += 4) {
   
@@ -91,11 +96,10 @@ function draw(img) {
       }
 
       n++;
-      debugger;
       ctx2.putImageData(imageData, 0, 0);
     };
     
-    setInterval(sort, 0);
+    var id = setInterval(sort, 0);
     
   };
 
@@ -146,7 +150,7 @@ function draw(img) {
 
   var selectionSort = function() {
     let i = 0, j;
-    const process = setInterval(loop, 16);
+    const process = setInterval(loop, 0);
 
     // Advance through the image pixel data array
     function loop() {
@@ -197,6 +201,60 @@ function draw(img) {
     }
   }
 
+  var insertionSort = function() {
+    
+  }
+
+  function merge(left, right) {
+    let resultArray = [], leftIndex = 0; rightIndex = 0;
+
+    dl = distance(left[leftIndex], left[leftIndex+1], left[leftIndex+2]);
+    dr = distance(right[rightIndex], right[rightIndex+1], right[rightIndex+2]);
+
+    // Concatenate array values in order
+    while(leftIndex < left.length && rightIndex < right.length) {
+      if (dl < dr) {
+        resultArray.push(left[leftIndex]);
+        resultArray.push(left[leftIndex+1]);
+        resultArray.push(left[leftIndex+2]);
+        leftIndex+=4; // Move left index pointer
+      } else {
+        resultArray.push(right[rightIndex]);
+        resultArray.push(right[rightIndex+1]);
+        resultArray.push(right[rightIndex+2]);
+        rightIndex+=4; // Move right index pointer
+      }
+    }
+
+    return resultArray
+            .concat(left.slice(leftIndex))
+            .concat(right.slice(rightIndex));
+  }
+
+  //Recursive merge sort
+
+  var mergeSort = function(unsortedArray) {
+
+    //Base case. 
+    if( unsortedArray.length <= 4 ) {
+      return unsortedArray;
+    }
+
+    const middle = Math.floor(unsortedArray.length / 2);
+
+    const left = unsortedArray.slice(0, middle);
+    const right = unsortedArray.slice(middle);
+
+    return merge( mergeSort(left), mergeSort(right) );
+
+  }
+
+  function mergeSortInit() {
+    data1 = mergeSort(data1);
+    debugger;
+    ctx2.putImageData(imageData, 0, 0);
+  }
+
   var btn = document.getElementById('func');
-  btn.addEventListener('click', selectionSort);
+  btn.addEventListener('click', mergeSortInit);
 }
