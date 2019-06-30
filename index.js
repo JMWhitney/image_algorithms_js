@@ -1,4 +1,4 @@
-var image = "flower.png";
+var image = "art.jpg";
 
 var img = new Image();
 img.src = image;
@@ -202,7 +202,39 @@ function draw(img) {
   }
 
   var insertionSort = function() {
-    
+    let i = 4, j, key = [], d1;
+
+    function loop() {
+      debugger;
+      //If array is full sorted stop the sorting process
+      if(i >= data1.length) {
+        clearInterval(process);
+        return;
+      }
+
+      key[0] = data1[i];
+      key[1] = data1[i+1];
+      key[2] = data1[i+2];
+
+      d1 = distance(data1[i], data1[i+1], data1[i+2]);
+      j = i - 4;
+
+      while(j >= 0 && distance(data1[j], data1[j+1], data1[j+2]) > d1) {
+        data1[j + 4] = data1[j];
+        data1[j + 5] = data1[j + 1];
+        data1[j + 6] = data1[j + 2];
+        j-=4;
+      }
+      data1[j + 4] = key[0];
+      data1[j + 5] = key[1];
+      data1[j + 6] = key[2];
+      
+      i += 4;
+
+      ctx2.putImageData(imageData, 0, 0);
+    }
+
+    const process = setInterval(loop, 0);
   }
 
   function merge(left, right) {
@@ -256,5 +288,5 @@ function draw(img) {
   }
 
   var btn = document.getElementById('func');
-  btn.addEventListener('click', mergeSortInit);
+  btn.addEventListener('click', insertionSort);
 }
