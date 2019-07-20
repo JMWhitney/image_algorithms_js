@@ -1,40 +1,40 @@
-var image = "art.jpg";
+var image = "flower.png";
 
 var img = new Image();
 img.src = image;
-var canvas = document.getElementById('canvas1');
-var ctx = canvas.getContext('2d');
-ctx.canvas.width = img.width;
-ctx.canvas.height = img.height;
 
-var canvas2 = document.getElementById('canvas2');
-ctx2 = canvas2.getContext('2d');
-ctx2.canvas.width = img.width;
-ctx2.canvas.height = img.height;
+var ctx = createCanvas('canvas1', img.height, img.width, document.getElementById('container'));
 
 img.onload = function() {
   draw(this);
-}
- 
-function distance(x1, y1, z1, x2=0, y2=0, z2=0) {
-  let x = x2 - x1;
-  let y = y2 - y1;
-  let z = z2 - z1;
-  return Math.round(Math.sqrt(x*x + y*y + z*z));
 }
 
 function draw(img) {
   ctx.drawImage(img, 0, 0);
   img.style.display = 'none';
-
+  
   //Source data
   var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   var data1 = imageData.data;
-
+  
   //Recreation data
   var drawingData = ctx2.getImageData(0, 0, canvas.width, canvas.height);
   var data2 = drawingData.data;
   
+  function swapPixel(source, destination) {
+    let temp = [data1[source], data1[source + 1], data1[source + 2], data1[source + 3]];
+
+    data1[source] = data1[destination];
+    data1[source + 1] = data1[destination + 1];
+    data1[source + 2] = data1[destination + 2];
+    data1[source + 3] = data1[destination + 3];
+
+    data1[destination] = temp[0];
+    data1[destination + 1] = temp[1];
+    data1[destination + 2] = temp[2];
+    data1[destination + 3] = temp[3];
+  }
+
   var replicate_random = function() {
     for (let i = 0; i < data2.length; i += 4) {
       let new_r = Math.floor(Math.random() * 255);
@@ -201,42 +201,6 @@ function draw(img) {
     }
   }
 
-  var insertionSort = function() {
-    let i = 4, j, key = [], d1;
-
-    function loop() {
-      debugger;
-      //If array is full sorted stop the sorting process
-      if(i >= data1.length) {
-        clearInterval(process);
-        return;
-      }
-
-      key[0] = data1[i];
-      key[1] = data1[i+1];
-      key[2] = data1[i+2];
-
-      d1 = distance(data1[i], data1[i+1], data1[i+2]);
-      j = i - 4;
-
-      while(j >= 0 && distance(data1[j], data1[j+1], data1[j+2]) > d1) {
-        data1[j + 4] = data1[j];
-        data1[j + 5] = data1[j + 1];
-        data1[j + 6] = data1[j + 2];
-        j-=4;
-      }
-      data1[j + 4] = key[0];
-      data1[j + 5] = key[1];
-      data1[j + 6] = key[2];
-      
-      i += 4;
-
-      ctx2.putImageData(imageData, 0, 0);
-    }
-
-    const process = setInterval(loop, 0);
-  }
-
   function merge(left, right) {
     let resultArray = [], leftIndex = 0; rightIndex = 0;
 
@@ -282,9 +246,46 @@ function draw(img) {
   }
 
   function mergeSortInit() {
-    data1 = mergeSort(data1);
     debugger;
+    data1 = mergeSort(data1);
     ctx2.putImageData(imageData, 0, 0);
+  }
+
+  var insertionSort = function() {
+    let i = 4, j, key = [], d1;
+
+    (function loop() {
+      debugger;
+      //If array is full sorted stop the sorting process
+
+      key[0] = data1[i];
+      key[1] = data1[i+1];
+      key[2] = data1[i+2];
+
+      d1 = distance(data1[i], data1[i+1], data1[i+2]);
+      j = i - 4;
+
+      while(j >= 0 && distance(data1[j], data1[j+1], data1[j+2]) > d1) {
+        data1[j + 4] = data1[j];
+        data1[j + 5] = data1[j + 1];
+        data1[j + 6] = data1[j + 2];
+        j-=4;
+      }
+      data1[j + 4] = key[0];
+      data1[j + 5] = key[1];
+      data1[j + 6] = key[2];
+      
+      i += 4;
+
+      ctx2.putImageData(imageData, 0, 0);
+
+      if(i > data1.length) {
+        return;
+      } else {
+        window.setImmediate(loop);
+      }
+    })();
+
   }
 
   var btn = document.getElementById('func');

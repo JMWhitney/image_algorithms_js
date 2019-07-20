@@ -1,0 +1,23 @@
+{
+  "name": "image_algorithms_js",
+  "version": "1.0.0",
+  "description": "Image algorithms in JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JMWhitney/image_algorithms_js.git"
+  },
+  "author": "Justin Whitney",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JMWhitney/image_algorithms_js/issues"
+  },
+  "homepage": "https://github.com/JMWhitney/image_algorithms_js#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "jest": "^24.8.0"
+  }
+}
